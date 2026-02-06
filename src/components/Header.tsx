@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Activity, LogIn, Shield } from "lucide-react";
+import { Activity, LogIn, Shield, User } from "lucide-react";
 import LoginModal from "./LoginModal";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -22,6 +23,13 @@ const Header = () => {
             <div className="status-indicator status-safe mr-2"></div>
             Systems Online
           </Badge>
+          
+          <Link to="/doctor-auth">
+            <Button variant="outline" size="sm" className="gap-2">
+              <User className="w-4 h-4" />
+              Doctor Portal
+            </Button>
+          </Link>
           
           <LoginModal>
             <Button variant="outline" size="sm" className="gap-2">

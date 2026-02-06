@@ -3,12 +3,15 @@ import OutbreakMap from "@/components/OutbreakMap";
 import SymptomChart from "@/components/SymptomChart";
 import SymptomReportForm from "@/components/SymptomReportForm";
 import LoginModal from "@/components/LoginModal";
+import RealtimeDashboard from "@/components/RealtimeDashboard";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { AlertTriangle, TrendingUp, Users, FileText, Shield } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
   return (
     <main className="container py-8 space-y-8">
       {/* Hero Section */}
@@ -34,6 +37,9 @@ const Index = () => {
               Clinical Access
             </Button>
           </LoginModal>
+          <Button variant="secondary" size="lg" className="gap-2" onClick={() => navigate('/public-auth')}>
+            Public Login
+          </Button>
           <Button variant="outline" size="lg" className="gap-2">
             <FileText className="w-5 h-5" />
             View Public Reports
@@ -41,9 +47,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Dashboard Stats */}
+      {/* Real-time Dashboard */}
       <section>
-        <DashboardStats />
+        <RealtimeDashboard refreshInterval={30000} />
       </section>
 
       {/* Charts and Map */}
@@ -84,7 +90,7 @@ const Index = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Analyze disease patterns and outbreak predictions
             </p>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => navigate('/trends')}>
               View Analytics
             </Button>
           </div>
@@ -99,11 +105,9 @@ const Index = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Professional tools for clinics and healthcare providers
             </p>
-            <LoginModal>
-              <Button variant="outline" className="w-full">
-                Clinical Login
-              </Button>
-            </LoginModal>
+            <Button variant="outline" className="w-full" onClick={() => navigate('/portal')}>
+              Healthcare Portal
+            </Button>
           </div>
         </Card>
       </section>
@@ -123,8 +127,7 @@ const Index = () => {
             <h3 className="font-semibold mb-2">Secure & Confidential</h3>
             <p className="text-sm text-muted-foreground">
               All health data is encrypted and anonymized. Clinical access requires professional 
-              verification. Connect to Supabase for full backend functionality including authentication, 
-              secure data storage, and real-time monitoring capabilities.
+              verification. Full functionality includes authentication, secure data storage, and real-time monitoring capabilities.
             </p>
           </div>
         </div>

@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Building2, User, AlertCircle } from "lucide-react";
+import { Shield, Building2 } from "lucide-react";
+import { loginDoctor } from "@/lib/api";
 
 interface LoginModalProps {
   children: React.ReactNode;
@@ -24,14 +25,20 @@ const LoginModal = ({ children }: LoginModalProps) => {
     password: ''
   });
 
-  const handleClinicLogin = (e: React.FormEvent) => {
+  const handleClinicLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Authentication requires Supabase integration");
+    try {
+      const { token } = await loginDoctor({ email: clinicData.email, password: clinicData.password });
+      sessionStorage.setItem('jwt', token);
+      window.location.href = '/dashboard';
+    } catch (err: any) {
+      alert(err?.message || 'Login failed');
+    }
   };
 
   const handlePublicLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Authentication requires Supabase integration");
+    alert("Public login not required. Use the form to submit anonymously.");
   };
 
   return (
@@ -47,25 +54,13 @@ const LoginModal = ({ children }: LoginModalProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="mb-4 p-3 bg-warning/10 border border-warning/20 rounded-lg">
-          <div className="flex items-center gap-2 mb-1">
-            <AlertCircle className="w-4 h-4 text-warning" />
-            <span className="text-sm font-medium">Supabase Integration Required</span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Enable authentication by connecting to Supabase in the top-right corner.
-          </p>
-        </div>
+        {/* No pre-auth notice */}
 
         <Tabs defaultValue="clinic" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-1">
             <TabsTrigger value="clinic" className="gap-2">
               <Building2 className="w-4 h-4" />
               Clinic Login
-            </TabsTrigger>
-            <TabsTrigger value="public" className="gap-2">
-              <User className="w-4 h-4" />
-              Public Access
             </TabsTrigger>
           </TabsList>
 
@@ -101,25 +96,7 @@ const LoginModal = ({ children }: LoginModalProps) => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="clinicName">Clinic/Hospital Name</Label>
-                <Input
-                  id="clinicName"
-                  placeholder="General Hospital"
-                  value={clinicData.clinicName}
-                  onChange={(e) => setClinicData({...clinicData, clinicName: e.target.value})}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="licenseNumber">Medical License Number</Label>
-                <Input
-                  id="licenseNumber"
-                  placeholder="License verification"
-                  value={clinicData.licenseNumber}
-                  onChange={(e) => setClinicData({...clinicData, licenseNumber: e.target.value})}
-                />
-              </div>
+              {/* Removed extra fields to simplify login: clinic name and license */}
 
               <Button type="submit" className="w-full gap-2">
                 <Building2 className="w-4 h-4" />
@@ -128,47 +105,7 @@ const LoginModal = ({ children }: LoginModalProps) => {
             </form>
           </TabsContent>
 
-          <TabsContent value="public" className="space-y-4">
-            <div className="text-center mb-4">
-              <Badge variant="secondary" className="gap-2">
-                <User className="w-3 h-3" />
-                Public Health Reporting
-              </Badge>
-            </div>
-
-            <form onSubmit={handlePublicLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="publicEmail">Email (Optional)</Label>
-                <Input
-                  id="publicEmail"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={publicData.email}
-                  onChange={(e) => setPublicData({...publicData, email: e.target.value})}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="publicPassword">Password (Optional)</Label>
-                <Input
-                  id="publicPassword"
-                  type="password"
-                  placeholder="For tracking your reports"
-                  value={publicData.password}
-                  onChange={(e) => setPublicData({...publicData, password: e.target.value})}
-                />
-              </div>
-
-              <div className="text-xs text-muted-foreground p-3 bg-muted/50 rounded border">
-                Public reporting allows anonymous symptom submission to help track disease patterns in your community.
-              </div>
-
-              <Button type="submit" variant="secondary" className="w-full gap-2">
-                <User className="w-4 h-4" />
-                Continue as Public User
-              </Button>
-            </form>
-          </TabsContent>
+          {/* Public access removed; public reports are anonymous via the form */}
         </Tabs>
       </DialogContent>
     </Dialog>

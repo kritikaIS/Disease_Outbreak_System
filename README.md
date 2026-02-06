@@ -1,73 +1,216 @@
-# Welcome to your Lovable project
+# Outbreak Watch - Disease Outbreak Detection System
 
-## Project info
+A comprehensive MERN stack application for real-time disease surveillance and outbreak detection. The system monitors symptoms reported from various localities and flags potential outbreaks when symptom counts exceed predefined thresholds.
 
-**URL**: https://lovable.dev/projects/1de3de7e-6489-4045-8375-f23d2cf3c997
+## Features
 
-## How can I edit this code?
+### Backend (Node.js + Express + MongoDB + Mongoose)
+- **Complete CRUD APIs** for all entities (Clinic, Doctor, Patient, Report, Symptom, Outbreak)
+- **Authentication System** with JWT tokens for secure access
+- **Search and Filter APIs** with pagination support
+- **Outbreak Detection Logic** with configurable thresholds
+- **Data Relationships** with proper population and validation
+- **Sample Seed Data** for testing and development
 
-There are several ways of editing your application.
+### Frontend (React + JavaScript + Tailwind CSS)
+- **Responsive Dashboard** with real-time statistics
+- **Interactive Charts** for symptom trends and outbreak visualization
+- **Regional Outbreak Map** showing disease patterns by location
+- **Symptom Reporting Form** for healthcare professionals
+- **Authentication Modal** with clinic and public access options
+- **Modern UI Components** using shadcn/ui and Lucide icons
 
-**Use Lovable**
+## Project Structure
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/1de3de7e-6489-4045-8375-f23d2cf3c997) and start prompting.
+```
+outbreak-watch/
+├── server/                 # Backend API
+│   ├── models/            # Mongoose schemas
+│   ├── routes/            # API endpoints
+│   ├── middleware/        # Authentication & validation
+│   ├── config/            # Database configuration
+│   ├── scripts/           # Seed data script
+│   └── server.js          # Main server file
+├── src/                   # Frontend React app
+│   ├── components/        # React components
+│   ├── pages/             # Page components
+│   ├── hooks/             # Custom React hooks
+│   └── lib/               # Utility functions
+└── public/                # Static assets
+```
 
-Changes made via Lovable will be committed automatically to this repo.
+## Database Schema
 
-**Use your preferred IDE**
+The system uses the following entities with proper relationships:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Clinic**: Healthcare facilities with location and type information
+- **Doctor**: Healthcare professionals linked to clinics
+- **Patient**: Patient records with demographic information
+- **Symptom**: Symptom definitions with severity levels
+- **Report**: Medical reports linking patients, doctors, clinics, and symptoms
+- **Outbreak**: Outbreak tracking with threshold monitoring
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Setup Instructions
 
-Follow these steps:
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (local installation or MongoDB Atlas)
+- npm or yarn
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Backend Setup
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. **Navigate to server directory:**
+   ```bash
+   cd server
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. **Configure environment variables:**
+   - Copy `config.env` and update the MongoDB connection string
+   - Update JWT secret for production use
+
+4. **Start MongoDB:**
+   - Make sure MongoDB is running on your system
+   - Default connection: `mongodb://localhost:27017/outbreak-watch`
+
+5. **Seed the database:**
+   ```bash
+   npm run seed
+   ```
+
+6. **Start the server:**
+   ```bash
+   npm run dev
+   ```
+   Server will run on `http://localhost:5000`
+
+### Frontend Setup
+
+1. **Navigate to project root:**
+   ```bash
+   cd ..
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   Frontend will run on `http://localhost:8080`
+
+### Quick Start (Both Services)
+
+From the project root, you can run:
+
+```bash
+# Start backend server
+npm run server
+
+# In another terminal, start frontend
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## API Endpoints
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Authentication
+- `POST /api/auth/register` - Register new doctor
+- `POST /api/auth/login` - Login doctor
+- `GET /api/auth/profile` - Get current user profile
 
-**Use GitHub Codespaces**
+### Entities
+- `GET/POST /api/clinics` - Manage clinics
+- `GET/POST /api/doctors` - Manage doctors
+- `GET/POST /api/patients` - Manage patients
+- `GET/POST /api/symptoms` - Manage symptoms
+- `GET/POST /api/reports` - Manage medical reports
+- `GET/POST /api/outbreaks` - Manage outbreaks
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Special Features
+- `POST /api/outbreaks/:id/analyze` - Analyze outbreak data
+- `GET /api/outbreaks/:id/stats` - Get outbreak statistics
 
-## What technologies are used for this project?
+## Demo Credentials
 
-This project is built with:
+After seeding the database, you can use these credentials:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**Email:** `sarah.johnson@hospital.com`  
+**Password:** `password123`
 
-## How can I deploy this project?
+## Key Features
 
-Simply open [Lovable](https://lovable.dev/projects/1de3de7e-6489-4045-8375-f23d2cf3c997) and click on Share -> Publish.
+### Outbreak Detection
+- Automatic threshold monitoring for symptom counts
+- Real-time outbreak status updates
+- Regional analysis and reporting
 
-## Can I connect a custom domain to my Lovable project?
+### Data Management
+- Complete CRUD operations for all entities
+- Search and filtering capabilities
+- Pagination for large datasets
+- Data validation and error handling
 
-Yes, you can!
+### Security
+- JWT-based authentication
+- Password hashing with bcrypt
+- Protected routes and middleware
+- Input validation and sanitization
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### User Interface
+- Responsive design for desktop and mobile
+- Real-time data visualization
+- Interactive charts and maps
+- Modern, accessible UI components
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Development
+
+### Adding New Features
+1. Create Mongoose models in `server/models/`
+2. Add API routes in `server/routes/`
+3. Update frontend components in `src/components/`
+4. Test with the seeded data
+
+### Database Operations
+- Use the seed script to populate test data
+- Modify `server/scripts/seedData.js` for custom data
+- Run `npm run seed` to reset and populate database
+
+## Production Deployment
+
+1. **Environment Variables:**
+   - Set `NODE_ENV=production`
+   - Use secure JWT secret
+   - Configure production MongoDB URI
+
+2. **Build Frontend:**
+   ```bash
+   npm run build
+   ```
+
+3. **Start Production Server:**
+   ```bash
+   npm run server:start
+   ```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For questions or issues, please create an issue in the repository or contact the development team.

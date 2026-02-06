@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Send, MapPin } from "lucide-react";
+import { submitPublicReport } from "@/lib/api";
 
 const SymptomReportForm = () => {
   const [formData, setFormData] = useState({
@@ -18,18 +19,33 @@ const SymptomReportForm = () => {
     additionalNotes: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your backend/Supabase
-    alert("Symptom report submitted successfully!");
-    setFormData({
-      symptoms: '',
-      symptomType: '',
-      location: '',
-      severity: '',
-      patientAge: '',
-      additionalNotes: ''
-    });
+    try {
+      const publicToken = typeof window !== 'undefined' ? localStorage.getItem('public_jwt') : null;
+      await submitPublicReport({
+        report_id: `PUB-${Date.now()}`,
+        symptoms_text: formData.symptoms,
+        state: formData.location,
+        symptom_type: formData.symptomType,
+        severity: formData.severity,
+        patient_age: formData.patientAge,
+        additional_notes: formData.additionalNotes,
+        // @ts-ignore - allowed extra field; backend ignores if null
+        public_user_token: publicToken || undefined,
+      });
+      alert("Symptom report submitted successfully!");
+      setFormData({
+        symptoms: '',
+        symptomType: '',
+        location: '',
+        severity: '',
+        patientAge: '',
+        additionalNotes: ''
+      });
+    } catch (err: any) {
+      alert(err?.message || "Failed to submit report");
+    }
   };
 
   return (
@@ -44,15 +60,7 @@ const SymptomReportForm = () => {
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
-        <div className="flex items-center gap-2 mb-2">
-          <AlertCircle className="w-4 h-4 text-warning" />
-          <span className="text-sm font-medium text-warning-foreground">Authentication Required</span>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          To submit symptom reports, connect to Supabase for secure data storage and clinic authentication.
-        </p>
-      </div>
+      {/* Authentication notice removed */}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -87,12 +95,12 @@ const SymptomReportForm = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">State (India)</Label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
               <Input
                 id="location"
-                placeholder="City, State/Province, Country"
+                placeholder="e.g., Maharashtra, Karnataka, Delhi"
                 className="pl-10"
                 value={formData.location}
                 onChange={(e) => setFormData({...formData, location: e.target.value})}
